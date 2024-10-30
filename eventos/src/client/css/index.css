@@ -1,0 +1,9 @@
+html,
+body {
+    background-color: #F2F2F2;
+    overflow: auto !important;
+}
+
+.panel .pager {
+    overflow: auto;
+}

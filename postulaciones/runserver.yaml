@@ -1,0 +1,6 @@
+homepage:
+  menu:
+    replace:
+
+      - desc: postulaciones
+        screenName: postulaciones

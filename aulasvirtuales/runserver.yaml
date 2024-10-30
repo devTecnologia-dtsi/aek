@@ -1,0 +1,6 @@
+homepage:
+  menu:
+    replace:
+
+      - desc: Aulas Virtuales
+        screenName: aulas-virtuales

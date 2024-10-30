@@ -1,0 +1,21 @@
+<<
+@configure
+  scripts:[
+    "datospersonales"
+  ]
+>>
+
+<< extend "templates/master.ect" >>
+
+
+<< block 'init': >>
+
+  {% if aek.action == "get-user" %}
+    {% set utils = aek.extension("CMAuthUtilities") %}
+    {% set attrs = utils.getTokenAttributes() %}
+
+    {% set username = attrs.username %}
+    {{ aek.respond(attrs) }}
+  {% endif %}
+
+<< end >>

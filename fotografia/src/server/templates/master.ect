@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<< if @connected: >>
+  {{ aek.set_aek_version("2.0") }}
+  {{ aek.set_header_text('<<- @title >>') }}
+<< end >>
+
+<< content 'init' >>
+
+<html lang="en" data-aek-package="[[__package_data__]]" data-public-assets="[[__public_assets__]]" data-env="<<= @env >>" data-platform="<<=if @connected then '{{ aek.get_platform() }}' else 'web2' >>" style="width: 100%;height: 100%;">
+<head>
+  <meta charset="utf-8">
+  <title><<= @title >></title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  << content 'head' >>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body <<- @get_body_attributes() >> style="overflow: hidden;width: 100%;height: 100%;" >
+
+  << content 'body' >>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+  <script>
+
+    << include @resolve('@ombiel/aek-asset-store/public/include.js') >>
+
+    loadCampusmAssetStore(function(assetStore) {
+
+      var scripts = <<- JSON.stringify(@get_scripts()) >>;
+      scripts = scripts.map(function(s) {return s.match(/^(https?:\/)?\//) && s || "[[__public_assets__]]/"+s+".js"});
+
+      assetStore.fetchAssets(scripts);
+      assetStore.loadJS(scripts);
+
+    });
+
+  </script>
+
+</body>
+</html>

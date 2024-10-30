@@ -1,0 +1,6 @@
+homepage:
+  menu:
+    replace:
+
+      - desc: Fotografia
+        screenName: my-new-screen

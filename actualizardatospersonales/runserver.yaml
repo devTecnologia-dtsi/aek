@@ -1,0 +1,7 @@
+homepage:
+  menu:
+    replace:
+
+      - desc: Actualizar Datos Personales
+        screenName: actualizar-datos-personales
+        img: "/src/client/assets/logo.jpg"

@@ -1,0 +1,35 @@
+<<
+@configure
+  connected: true
+  scripts:[
+    "actualizar-datos-personales"
+  ]
+>>
+
+<< extend "templates/master.ect" >>
+
+<< block "init": >>
+  {#
+  {% set utils = aek.extension("CMAuthUtilities") %}
+  {% set attrs = utils.getTokenAttributes() %}
+
+  
+  {% set username = attrs.username %}
+  {{ aek.respond(attrs.extraAttrs) }}
+ 
+  
+  {% if aek.action == "getTokenAttributes" %}
+    {% set service = aek.create_service("https://uniminuto.campusm.exlibrisgroup.com/cmrest/utils/getTokenAttributes") %}
+    {{ service.set_method("GET") }}
+    {{ aek.respond(service.json) }}
+  {% endif %}
+  #}
+  
+  {% if aek.action == "get-user" %}
+    {% set utils = aek.extension("CMAuthUtilities") %}
+    {% set attrs = utils.getTokenAttributes() %}
+ 
+    {% set username = attrs.username %}
+    {{ aek.respond(attrs) }}
+  {% endif %}
+<< end >>

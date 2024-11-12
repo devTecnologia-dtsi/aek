@@ -1,0 +1,7 @@
+homepage:
+  menu:
+    replace:
+
+      - desc: Recibos Pendientes
+        screenName: recibos-pendientes
+        img: "/src/client/assets/logo.jpg"

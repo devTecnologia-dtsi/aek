@@ -1,0 +1,56 @@
+[
+    {
+        "Signo": "+",
+        "DescripcionCondicion": "CARNE REACTIVACION",
+        "Importe": "33600",
+        "TipoCondicion": "I001",
+        "Cliente": "500",
+        "TipoImporte": "C"
+    },
+    {
+        "Signo": "+",
+        "DescripcionCondicion": "CARNE CAMBIO-REPOSICION",
+        "Importe": "33600",
+        "TipoCondicion": "I003",
+        "Cliente": "500",
+        "TipoImporte": "C"
+    },
+    {
+        "Signo": "+",
+        "DescripcionCondicion": "MATRICULA PROFESIONAL",
+        "Importe": "3903900",
+        "TipoCondicion": "MPRO",
+        "Cliente": "500",
+        "TipoImporte": "C"
+    },
+    {
+        "Signo": "+",
+        "DescripcionCondicion": "DONACIÓN",
+        "Importe": "0",
+        "TipoCondicion": "ZDON",
+        "Cliente": "500",
+        "TipoImporte": "C"
+    }
+]
+
+
+//FINACIADO COOPERATIVA
+	{
+        "Signo": "-",
+        "DescripcionCondicion": "Val.a fin. Coop",
+        "Importe": "-10000",
+        "TipoCondicion": "ZDFI",
+        "Cliente": "500",
+        "TipoImporte": "C"
+    	}
+
+//FINACIADO COLSUBSIDIO
+	{
+        "Signo": "-",
+        "DescripcionCondicion": "Val.a fin. Cols",
+        "Importe": "-10000",
+        "TipoCondicion": "ZFCB",
+        "Cliente": "500",
+        "TipoImporte": "C"
+    	}
+

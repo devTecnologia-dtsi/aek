@@ -1,0 +1,63 @@
+michell.rojas@uniminuto.edu.co
+Michell2023**
+
+set NODE_OPTIONS=--openssl-legacy-provider
+
+https://uniminuto-sandbox.campusm.exlibrisgroup.com/campusm
+
+
+--codigo ect
+<<
+@configure
+  connected: true
+  scripts:[
+    "actualizar-datos-personales"
+  ]
+>>
+
+<< extend "templates/master.ect" >>
+
+<< block "init": >>
+
+  {% set utils = aek.extension("CMAuthUtilities") %}
+  {% set attrs = utils.getTokenAttributes() %}
+
+  {% set username = attrs.username %}
+  {{ aek.respond(username) }}
+
+<< end >>
+
+
+ultima version publicada en prod ==>   "version": "1.0.15",
+
+
+//DEFINO LOS ESTILOS
+const estiloFuentes = {
+  fontFamily: 'Helvetica',
+  fontSize:'12px'
+};
+
+const estiloBadges = {
+  backgroundColor: '#4AB9AE',
+  color: 'white',
+  marginRight: '5px',
+  padding: '5px 10px',
+  borderRadius: '5px',
+  display: 'inline-block'
+};
+
+const estiloBase = {
+  backgroundColor: '#4AB9AE'
+}
+
+const estiloHover = {
+  backgroundColor: '#297E75'
+}
+
+
+
+  //Manejara el estado para ver si se hizo hover sobre un elemento
+  const [isHovered, setIsHovered] = useState(false);
+
+ onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}   style={isHovered ? estiloHover : estiloBase}

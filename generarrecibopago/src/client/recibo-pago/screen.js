@@ -883,10 +883,15 @@ export default Screen = () => {
                                     </span>
 
                                     <span className="mr-3">
-                                        <input type="radio" name="rbtCombinacion" onChange={() => { setMostrarFormCombinacionPago(false) }} />
+                                        <input type="radio" checked={!mostrarFormCombinacionPago} name="rbtCombinacion" onChange={() => { setMostrarFormCombinacionPago(false) }} />
                                         <label>No</label>
                                     </span>
 
+                                </div>
+
+                                <div className="flex items-center mt-3 mb-3" >
+                                    <p>Ten en cuenta que los pagos con tarjeta de crédito, tarjeta débito o cheque, solo se recibirán en las sedes donde UNIMINUTO tenga caja para pago.
+                                       <br/> Escribe en los recuadros el valor a pagar según lo desee:</p>
                                 </div>
 
                                 {
@@ -954,6 +959,12 @@ export default Screen = () => {
                                                 value={(total - sumaValoresCombinados)} />
                                         </div>
 
+                                        <div className="flex items-center mt-2">
+                                            <label style={estiloBadges} htmlFor="" className="w-1/3 text-gray-700 font-medium">Total</label>
+                                            <input type="number" readOnly disabled className="text-md font-bold flex-1 px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                value={total.toLocaleString('de-DE')} />
+                                        </div>
+
                                     </div>
                                 }
 
@@ -1002,5 +1013,3 @@ export default Screen = () => {
 
         </>)
 }
-
-

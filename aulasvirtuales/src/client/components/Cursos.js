@@ -76,7 +76,7 @@ const Cursos = ({ userData, ctx, baseUrl, headers, transformDate }) => {
                         <Cargando mensaje={"Estamos cargando tus cursos"} />
                     :
                     infoCursos.length == 0 ?
-                        <Cargando mensaje={"No hay cursos disponibles"} isLoading={false} />
+                        <Cargando mensaje={"Estamos trabajando para obtener tu información"} isLoading={false} />
                         :
                         <>
                             <div className="container mt-1">

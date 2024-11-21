@@ -11,9 +11,13 @@ const Tabs = ({ ctx, userData }) => {
     // state
     const [messageUnRead, setMessageUnRead] = useState([])
 
-    // const
-    const baseUrl = 'https://uniminuto.test.digibee.io/pipeline/uniminuto/v1'
-    const headers = { 'apikey': 'uxpWFePgheXvuP9Tun8TYxvjb0FgeSLH' }
+    // const test
+    // const baseUrl = 'https://uniminuto.test.digibee.io/pipeline/uniminuto/v1'
+    // const headers = { 'apikey': 'uxpWFePgheXvuP9Tun8TYxvjb0FgeSLH' }
+
+    // const production
+    const baseUrl = 'https://uniminuto.api.digibee.io/pipeline/uniminuto/v1'
+    const headers = { 'apikey': 'ITnjVcrLWfYpY2B246EcrWO6Hln3LD7a' }
 
     // quita el estilo verflow hidden que trae el aek por defecto
     const element = document.getElementsByClassName("panel");

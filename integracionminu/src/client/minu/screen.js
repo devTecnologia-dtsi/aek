@@ -6,7 +6,9 @@ export default Screen = () => {
   const [tokenUser, setTokenUser] = useState();
   useEffect(() => {
     // make a request cmAuth
-    reqz
+    request.action("get-user").end((err, response) => {
+      setTokenUser(response.body)
+    });
 
   }, [])
 
@@ -29,7 +31,7 @@ export default Screen = () => {
           :
           <iframe
             style={{ height: '100%', width: '100%' }}
-            src={`https://minutest.uniminuto.edu/chat/minu/${tokenUser.mail}`}
+            src={`https://minu.uniminuto.edu/chat/minu/${tokenUser.mail}`}
           >
           </iframe>
       }

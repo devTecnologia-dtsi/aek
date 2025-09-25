@@ -15,7 +15,8 @@ const CartaEvento = ({ actividad, modalidad, rectoria, sede, fechainicio, idInst
                                 inscrito ?
                                     'Ver evento'
                                     :
-                                    'Registrarse'
+                                    // 'Registrarse'
+                                    'Ver evento'
                             }
                         </a>
                     </div>

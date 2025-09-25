@@ -31,7 +31,11 @@ const Cursos = ({ userData, ctx, baseUrl, headers, transformDate }) => {
             let nuevosCursos = [...infoCursos]
             results.forEach(({ executionId, result, }) => {
                 if (result.status == '200') {
-                    nuevosCursos = [...nuevosCursos, { [executionId]: result.body }]
+                    nuevosCursos = [...nuevosCursos, {
+                        [executionId]: result.body.map((curso) => {
+                            return { ...curso, open: false }
+                        })
+                    }]
                 }
             })
             setInfoCursos(nuevosCursos)
@@ -45,6 +49,18 @@ const Cursos = ({ userData, ctx, baseUrl, headers, transformDate }) => {
 
     const obtenerEventos = async (id, instancia) => {
         try {
+            setInfoCursos(prevCursos =>
+                prevCursos.map(cursoGroup => {
+                    const key = Object.keys(cursoGroup)[0];
+                    if (key !== instancia[0]) return cursoGroup;
+
+                    return {
+                        [key]: cursoGroup[key].map(curso =>
+                            curso.id === id ? { ...curso, open: !curso.open } : curso
+                        )
+                    };
+                })
+            );
             if (eventos[id] && eventos[id].length > 0 || cargandoEventos[id]) {
                 return
             }
@@ -57,7 +73,7 @@ const Cursos = ({ userData, ctx, baseUrl, headers, transformDate }) => {
                 const { body } = results[0]
                 if (body.hasOwnProperty("events")) {
                     if (body.events.length != 0) {
-                        setEventos({ ...eventos, [id]: body.events.filter(({eventtype}) => eventtype == 'due' || eventtype == 'close') })
+                        setEventos({ ...eventos, [id]: body.events.filter(({ eventtype }) => eventtype == 'due' || eventtype == 'close') })
                     }
                 }
             }
@@ -67,7 +83,7 @@ const Cursos = ({ userData, ctx, baseUrl, headers, transformDate }) => {
         }
     }
     return (
-        <>
+        <div style={{ backgroundColor: 'rgb(242,245,248)' }}>
             {
                 cargando ?
                     error ?
@@ -80,30 +96,31 @@ const Cursos = ({ userData, ctx, baseUrl, headers, transformDate }) => {
                         :
                         <>
                             <div className="container mt-1">
-                                <div className="alert text-white text-center" style={{ color: 'black', backgroundColor: '#779b00', borderColor: '#779b00' }} role="alert">
+                                <div className="alert text-center mt-1" style={{ color: 'rgb(171, 178, 185)' }} role="alert">
                                     <p>La información que se visualiza a continuación no es considerada una certificación de UNIMINUTO, puede estar sujeta a ajustes y/o modificaciones.</p>
                                 </div>
                             </div>
                             {
                                 infoCursos.map((curso) => {
                                     const executionId = Object.keys(curso)
-                                    return curso[executionId].map(({ id, shortname, fullname, startdate, enddate }) => {
+                                    return curso[executionId].map(({ id, shortname, fullname, open }) => {
+                                        let style = open ? { backgroundColor: 'rgb(36,101,164)', color: 'white' } : { backgroundColor: 'white', color: 'black' }
                                         return (
-                                            <div className="card text-center m-3" key={id} style={{ borderTop: '4px solid #4AB9AE' }}>
+                                            <div className="card text-center mx-3 mt-4" key={id} style={{ borderTop: '4px solid rgb(36,101,164)' }}>
                                                 <div className="row g-0">
                                                     <div className="col-md-8">
-                                                        <div className="card-header">
+                                                        <div className="card-header" style={style}>
                                                             <h5 className="card-title">{fullname} - {shortname}</h5>
                                                         </div>
                                                         <div className="card-body">
-                                                            <div className="row g-0 text-center text-uppercase">
+                                                            <div className="row g-0 text-center">
                                                                 <div className="col-12">
                                                                     <div className="accordion" id={`accordion-${id}`}>
                                                                         <div className="accordion-item">
                                                                             <h2 className="accordion-header" id={`heading-${id}`}>
-                                                                                <button className="accordion-button collapsed position-relative" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${id}`} aria-expanded="true" aria-controls={`collapse-${id}`} onClick={() => obtenerEventos(id, executionId)}>
+                                                                                <button className="accordion-button collapsed position-relative" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${id}`} aria-expanded="true" aria-controls={`collapse-${id}`} style={{ backgroundColor: 'white', color: '#6d6d6d' }} onClick={() => obtenerEventos(id, executionId)}>
                                                                                     <MdEventNote />
-                                                                                    Eventos
+                                                                                    Ver actividades y eventos
                                                                                 </button>
                                                                             </h2>
                                                                         </div>
@@ -119,7 +136,7 @@ const Cursos = ({ userData, ctx, baseUrl, headers, transformDate }) => {
                                                                                                 transformDate={transformDate}
                                                                                             />
                                                                                         ) : (
-                                                                                            <p>No hay eventos disponibles.</p>
+                                                                                            <p>No hay actividades y/o eventos disponibles.</p>
                                                                                         )
                                                                                     )
                                                                                 }
@@ -138,7 +155,7 @@ const Cursos = ({ userData, ctx, baseUrl, headers, transformDate }) => {
                             }
                         </>
             }
-        </>
+        </div>
     )
 }
 

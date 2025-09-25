@@ -1,46 +1,14 @@
-import React, { useEffect, useState } from "react";
-// service
-import { fetchData } from "../services/service";
+import React, { useState } from "react";
 // components
 import Cargando from "./Cargando";
 
-const Mensajes = ({ userData, baseUrl, headers, transformDate, setMessageUnRead, messageUnRead }) => {
-    // const
-    const [cargando, setCargando] = useState(true);
-
-    useEffect(() => {
-        obtenerMensajes();
-    }, []);
-
-    const obtenerMensajes = async () => {
-        try {
-            setCargando(true);
-            const result = await fetchData({
-                url: `${baseUrl}/moodle-lms-umd/getNotReadMessages?useridto=${userData.mail}`,
-                headers
-            });
-            let nuevosMensajes = [...messageUnRead];
-            result.forEach(({ result }) => {
-                const body = result.body;
-                if (body.hasOwnProperty("messages")) {
-                    if (body.messages.length !== 0) {
-                        nuevosMensajes = [...nuevosMensajes, ...body.messages];
-                    }
-                }
-            });
-            setMessageUnRead(nuevosMensajes)
-            setCargando(false);
-        } catch (error) {
-            console.warn(error);
-        }
-    };
-
+const Mensajes = ({ transformDate, messageUnRead, cargando, mensajeCargando, mensajeSinDatos }) => {
     return (
         <div>
             {cargando ? (
-                <Cargando mensaje={"Se están cargando los mensajes"} />
+                <Cargando mensaje={mensajeCargando} />
             ) : messageUnRead.length === 0 ? (
-                <Cargando mensaje={"En este momento no tienes mensajes por leer"} isLoading={false} />
+                <Cargando mensaje={mensajeSinDatos} isLoading={false} />
             ) : (
                 messageUnRead.map(({ id, subject, userfromfullname, timecreated, text }) => {
                     return (

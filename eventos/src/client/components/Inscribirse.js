@@ -7,8 +7,10 @@ const Inscribirse = ({ ctx }) => {
     // const 
     // const urlApIWallet = "http://localhost/api_wallet"
     const urlApIWallet = "https://comunidad.uniminuto.edu/api_wallet_test"
+    // const urlApIWallet = "https://comunidad.uniminuto.edu/api_wallet"
     // const urlApiEventos = "http://localhost/api_eventos"
     const urlApiEventos = "https://registros.uniminuto.edu/api_eventos_test"
+    // const urlApiEventos = "https://registros.uniminuto.edu/api_eventos"
 
     // state
     const [infoEvento, setInfoEvento] = useState({})
@@ -18,8 +20,9 @@ const Inscribirse = ({ ctx }) => {
     const [disabledTipoDocumento, setDisabledTipoDocumento] = useState(true)
     const [formularioCompleto, setFormularioCompleto] = useState(true)
     const [ejecutandoAccion, setEjecutandoAccion] = useState(false)
-    const [exitoEjecucion, setExitoEjecucion] = useState(null)
+    const [exitoEjecucionInscripcion, setExitoEjecucionInscripcion] = useState(false)
     const [accionFinalizada, setAccionFinalizada] = useState(false)
+    const [exitoCancelacionEvento, setExitoCancelacionEvento] = useState(false)
 
     const { params } = ctx
     useEffect(() => {
@@ -29,7 +32,6 @@ const Inscribirse = ({ ctx }) => {
 
     const obtenerInformacionEvento = async () => {
         setCargando(true)
-        // https://registros.uniminuto.edu/api_eventos_test
         const result = await fetchData({
             url: `${urlApiEventos}/select/index.php?fn=consultaEventoDetalle&evento=${params['id']}&documento=${params['documento']}`
         });
@@ -79,10 +81,9 @@ const Inscribirse = ({ ctx }) => {
             return
         }
         setEjecutandoAccion(true)
-        // enviar informacion a softexpert
-        const result = await postData({
-            url: `${urlApiEventos}/select/eventos.php`,
-            params: [
+        const resultSaveEvent = await postData({
+            url: `${urlApIWallet}/modules/evento.php`,
+            params: JSON.stringify([
                 {
                     "idInstancia": params['id'],
                     "tipoUsuario": "1",
@@ -93,24 +94,18 @@ const Inscribirse = ({ ctx }) => {
                     "notificaciones": "Si",
                     "rol": "ESTUDIANTE"
                 }
-            ]
-        })
-
-        // if (result.recordKey){
-        // enviar informacion a la base de datos de uwallet
-        const resultSaveEvent = await postData({
-            url: `${urlApIWallet}/modules/evento.php`,
-            params: JSON.stringify(result)
+            ])
         })
         setEjecutandoAccion(false)
-        setExitoEjecucion(true)
+        setExitoEjecucionInscripcion(true)
         if (resultSaveEvent[0].resp) {
             setAccionFinalizada(true)
             setTimeout(() => {
                 ctx.router.goto(`/`)
             }, 4000)
+        } else {
+
         }
-        // }
     }
 
     const cancelar = async () => {
@@ -123,7 +118,7 @@ const Inscribirse = ({ ctx }) => {
             }, 4000)
         }
         setEjecutandoAccion(false)
-        setExitoEjecucion(true)
+        setExitoCancelacionEvento(true)
     }
     return (
         <>
@@ -171,7 +166,7 @@ const Inscribirse = ({ ctx }) => {
                                                     infoEvento.fechaactividad
                                                         ?
                                                         <div className="col-6 mb-3">
-                                                            <h6><b>Fecha Acitividad</b></h6>
+                                                            <h6><b>Fecha Actividad</b></h6>
                                                             <p className="text-muted">{transformDate(infoEvento.fechaactividad, true)}</p>
                                                         </div>
                                                         :
@@ -191,7 +186,7 @@ const Inscribirse = ({ ctx }) => {
                                                     infoEvento.finicioins
                                                         ?
                                                         <div className="col-12 text-center mb-3">
-                                                            <h6><b>Fecha Inscripción</b></h6>
+                                                            <h6><b>Fecha de la Actividad</b></h6>
                                                             <div className="row">
                                                                 <div className="col-6">
                                                                     <p className="text-muted"><strong>Desde:</strong> {transformDate(infoEvento.finicioins, true)}</p>
@@ -231,7 +226,7 @@ const Inscribirse = ({ ctx }) => {
                                                     </div>
                                                 </div>
                                                 :
-                                                <>
+                                                <div className="">
                                                     <strong>FORMULARIO DE REGISTRO</strong>
                                                     <hr />
                                                     <div className="col-12">
@@ -252,22 +247,24 @@ const Inscribirse = ({ ctx }) => {
                                                     <div className="col-12 mt-2">
                                                         <input type="text" className="form-control" placeholder="Documento" value={params['documento']} disabled />
                                                     </div>
-                                                </>
+                                                </div>
                                     }
                                     {
-                                        exitoEjecucion ?
-                                            infoEvento.estado == 1 ?
-                                                <div className="col-12 mt-2">
-                                                    <div className="alert alert-success" role="alert">
-                                                        <strong>¡Muy bien!</strong> Cancelaste el evento con exito
-                                                    </div>
+                                        exitoEjecucionInscripcion ?
+                                            <div className="col-12 mt-2">
+                                                <div className="alert alert-success" role="alert">
+                                                    <strong>¡Muy bien!</strong> Te registraste con exito
                                                 </div>
-                                                :
-                                                <div className="col-12 mt-2">
-                                                    <div className="alert alert-success" role="alert">
-                                                        <strong>¡Muy bien!</strong> Te registraste con exito
-                                                    </div>
+                                            </div>
+                                            : ""
+                                    }
+                                    {
+                                        exitoCancelacionEvento ?
+                                            <div className="col-12 mt-2">
+                                                <div className="alert alert-success" role="alert">
+                                                    <strong>¡Muy bien!</strong> Cancelaste el evento con exito
                                                 </div>
+                                            </div>
                                             : ""
                                     }
                                 </div>
@@ -291,7 +288,10 @@ const Inscribirse = ({ ctx }) => {
                                             infoEvento.estado == 1 ?
                                                 <button className="btn btn-danger" onClick={() => cancelar()} disabled={accionFinalizada}>Cancelar</button>
                                                 :
-                                                <button className="btn btn-primary" onClick={() => inscribirse()} disabled={accionFinalizada}>Inscribirse</button>
+                                                infoEvento.estado == 2 ?
+                                                    null
+                                                    :
+                                                    <button className="btn btn-primary" onClick={() => inscribirse()} disabled={accionFinalizada}>Inscribirse</button>
                                     }
                                 </div>
                             </div>

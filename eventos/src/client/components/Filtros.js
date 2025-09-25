@@ -22,8 +22,10 @@ const Filtros = ({
 }) => {
     // const
     const urlDigibee = "https://uniminuto.test.digibee.io/pipeline/uniminuto/v1"
+    // const urlDigibee = "https://uniminuto.api.digibee.io/pipeline/uniminuto/v1"
     const urlEstudiantes = "https://comunidad.uniminuto.edu/estudiantes"
     const urlEventos = "https://registros.uniminuto.edu/api_eventos_test"
+    // const urlEventos = "https://registros.uniminuto.edu/api_eventos"
     // const urlEventos = "http://localhost/api_eventos"
 
     // states
@@ -31,7 +33,8 @@ const Filtros = ({
     const [disabledSede, setDisabledSede] = useState(true)
     const [disabledArea, setDisabledArea] = useState(true)
     const headers = {
-        'apikey': '5H9CcvkLZJTgPDDCXTXTI7KC90k6prl0',
+        'apikey': '5H9CcvkLZJTgPDDCXTXTI7KC90k6prl0', // pruebas
+        // 'apikey': 'ITnjVcrLWfYpY2B246EcrWO6Hln3LD7a',
         'Content-Type': 'application/json'
     }
 

@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // icons
 import { FaBook } from "@react-icons/all-files/fa/FaBook";
 import { FaInbox } from "@react-icons/all-files/fa/FaInbox";
+import { FaBell } from "@react-icons/all-files/fa/FaBell";
 // componets
 import Cursos from "./Cursos";
 import Cargando from "./Cargando";
 import Mensajes from "./Mensajes";
+// services
+import { fetchData } from "../services/service";
 
 const Tabs = ({ ctx, userData }) => {
     // state
     const [messageUnRead, setMessageUnRead] = useState([])
+    const [notification, setNotification] = useState([])
+    const [cargando, setCargando] = useState(true);
 
     // const test
     // const baseUrl = 'https://uniminuto.test.digibee.io/pipeline/uniminuto/v1'
@@ -40,6 +45,38 @@ const Tabs = ({ ctx, userData }) => {
 
         return `${descripcionMonth} ${day}, ${year}`;
     }
+
+    useEffect(() => {
+        if (userData) {
+            obtenerMensajes();
+        }
+    }, [userData]);
+
+    const obtenerMensajes = async () => {
+        try {
+            setCargando(true);
+            const result = await fetchData({
+                url: `${baseUrl}/moodle-lms-umd/getNotReadMessages?useridto=${userData.mail}`,
+                headers
+            });
+            let nuevosMensajes = [...messageUnRead];
+            let nuevasNotificaciones = [...notification];
+            result.forEach(({ result }) => {
+                const body = result.body;
+                if (body.hasOwnProperty("messages")) {
+                    if (body.messages.length !== 0) {
+                        nuevosMensajes = [...nuevosMensajes, ...body.messages.filter(({ notification }) => !notification)];
+                        nuevasNotificaciones = [...nuevasNotificaciones, ...body.messages.filter(({ notification }) => notification)]
+                    }
+                }
+            });
+            setMessageUnRead(nuevosMensajes)
+            setNotification(nuevasNotificaciones)
+            setCargando(false);
+        } catch (error) {
+            console.warn(error);
+        }
+    };
     return (
         <>
             {
@@ -55,8 +92,21 @@ const Tabs = ({ ctx, userData }) => {
                                     {
                                         messageUnRead.length > 0
                                             ?
-                                            <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+                                            <span className="z-1 position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
                                                 {messageUnRead.length}
+                                                <span className="visually-hidden">New alerts</span>
+                                            </span>
+                                            :
+                                            null
+                                    }
+                                </button>
+                                <button className="nav-link position-relative" id="nav-notificacion-tab" data-bs-toggle="tab" data-bs-target="#nav-notificacion" type="button" role="tab" aria-controls="nav-notificacion" aria-selected="false">
+                                    <FaBell /> Notificaciones
+                                    {
+                                        notification.length > 0
+                                            ?
+                                            <span className="z-1 position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+                                                {notification.length}
                                                 <span className="visually-hidden">New alerts</span>
                                             </span>
                                             :
@@ -70,7 +120,10 @@ const Tabs = ({ ctx, userData }) => {
                                 <Cursos userData={userData} ctx={ctx} baseUrl={baseUrl} headers={headers} transformDate={transformDate} />
                             </div>
                             <div className="tab-pane fade" id="nav-mensajes" role="tabpanel" aria-labelledby="nav-mensajes-tab">
-                                <Mensajes userData={userData} baseUrl={baseUrl} headers={headers} transformDate={transformDate} setMessageUnRead={setMessageUnRead} messageUnRead={messageUnRead} />
+                                <Mensajes messageUnRead={messageUnRead} cargando={cargando} transformDate={transformDate} mensajeCargando={"Se estan cargando los mensajes"} mensajeSinDatos={"En este momento no tienes mensaje para leer"} />
+                            </div>
+                            <div className="tab-pane fade" id="nav-notificacion" role="tabpanel" aria-labelledby="nav-notificacion-tab">
+                                <Mensajes messageUnRead={notification} cargando={cargando} transformDate={transformDate} mensajeCargando={"Se estan cargando las notificaciones"} mensajeSinDatos={"No tienes notificaciones"} />
                             </div>
                         </div>
                     </>

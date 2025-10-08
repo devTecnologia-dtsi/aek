@@ -21,11 +21,11 @@ const Filtros = ({
     filtrarEventos
 }) => {
     // const
-    const urlDigibee = "https://uniminuto.test.digibee.io/pipeline/uniminuto/v1"
-    // const urlDigibee = "https://uniminuto.api.digibee.io/pipeline/uniminuto/v1"
+    // const urlDigibee = "https://uniminuto.test.digibee.io/pipeline/uniminuto/v1"
+    const urlDigibee = "https://uniminuto.api.digibee.io/pipeline/uniminuto/v1"
     const urlEstudiantes = "https://comunidad.uniminuto.edu/estudiantes"
-    const urlEventos = "https://registros.uniminuto.edu/api_eventos_test"
-    // const urlEventos = "https://registros.uniminuto.edu/api_eventos"
+    // const urlEventos = "https://registros.uniminuto.edu/api_eventos_test"
+    const urlEventos = "https://registros.uniminuto.edu/api_eventos"
     // const urlEventos = "http://localhost/api_eventos"
 
     // states

@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { fetchData, postData } from "../services/service"
 import QRCode from "react-qr-code";
-import { FaCheckCircle } from "@react-icons/all-files/fa/FaCheckCircle";
 
 const Inscribirse = ({ ctx }) => {
     // const 
     // const urlApIWallet = "http://localhost/api_wallet"
-    const urlApIWallet = "https://comunidad.uniminuto.edu/api_wallet_test"
-    // const urlApIWallet = "https://comunidad.uniminuto.edu/api_wallet"
+    // const urlApIWallet = "https://comunidad.uniminuto.edu/api_wallet_test"
+    const urlApIWallet = "https://comunidad.uniminuto.edu/api_wallet"
     // const urlApiEventos = "http://localhost/api_eventos"
-    const urlApiEventos = "https://registros.uniminuto.edu/api_eventos_test"
-    // const urlApiEventos = "https://registros.uniminuto.edu/api_eventos"
+    // const urlApiEventos = "https://registros.uniminuto.edu/api_eventos_test"
+    const urlApiEventos = "https://registros.uniminuto.edu/api_eventos"
 
     // state
     const [infoEvento, setInfoEvento] = useState({})
@@ -147,7 +146,7 @@ const Inscribirse = ({ ctx }) => {
                             </div>
                             <div className="card-body">
                                 <div className="row g-0">
-                                    <div className="col-md-8">
+                                    <div className="col-md-12">
                                         <div className="card-body p-4">
                                             <div className="row pt- text-center text-uppercase">
                                                 <div className="col-6 mb-3">
@@ -163,36 +162,16 @@ const Inscribirse = ({ ctx }) => {
                                                     <p className="text-muted">{infoEvento.lugarCanal}</p>
                                                 </div>
                                                 {
-                                                    infoEvento.fechaactividad
-                                                        ?
-                                                        <div className="col-6 mb-3">
-                                                            <h6><b>Fecha Actividad</b></h6>
-                                                            <p className="text-muted">{transformDate(infoEvento.fechaactividad, true)}</p>
-                                                        </div>
-                                                        :
-                                                        null
-                                                }
-                                                {
-                                                    infoEvento.horaactividad
-                                                        ?
-                                                        <div className="col-6 mb-3">
-                                                            <h6><b>Hora</b></h6>
-                                                            <p className="text-muted">{transformDate(infoEvento.horaactividad, false)}</p>
-                                                        </div>
-                                                        :
-                                                        null
-                                                }
-                                                {
                                                     infoEvento.finicioins
                                                         ?
                                                         <div className="col-12 text-center mb-3">
                                                             <h6><b>Fecha de la Actividad</b></h6>
                                                             <div className="row">
                                                                 <div className="col-6">
-                                                                    <p className="text-muted"><strong>Desde:</strong> {transformDate(infoEvento.finicioins, true)}</p>
+                                                                    <p className="text-muted"><strong>Desde:</strong> {transformDate(infoEvento.fechainicio, true)}</p>
                                                                 </div>
                                                                 <div className="col-6">
-                                                                    <p className="text-muted"><strong>Hasta:</strong> {transformDate(infoEvento.ffinins, true)}</p>
+                                                                    <p className="text-muted"><strong>Hasta:</strong> {transformDate(infoEvento.fechafin, true)}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -207,47 +186,31 @@ const Inscribirse = ({ ctx }) => {
                                         </div>
                                     </div>
                                     {
-                                        infoEvento.estado == 1 ?
+                                        infoEvento.estado == 1 || infoEvento.estado == 2 ?
                                             <QRCode value={btoa(infoEvento.idUwallet)}></QRCode>
                                             :
-                                            infoEvento.estado == 2 ?
+                                            <div className="">
+                                                <strong>FORMULARIO DE REGISTRO</strong>
+                                                <hr />
                                                 <div className="col-12">
-                                                    <div className="card">
-                                                        <div className="card-body">
-                                                            <div className="row g-0 text-center">
-                                                                <div className="col-2">
-                                                                    <FaCheckCircle />
-                                                                </div>
-                                                                <div className="col-10">
-                                                                    <p>Gracias por asistir a este evento</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                :
-                                                <div className="">
-                                                    <strong>FORMULARIO DE REGISTRO</strong>
-                                                    <hr />
-                                                    <div className="col-12">
-                                                        <select className="form-select" value={tipoDocumento} disabled={disabledTipoDocumento} onChange={(e) => setTipoDocumento(e.target.value)}>
-                                                            <option value="">
-                                                                {disabledTipoDocumento ? 'Cargando Tipo de Documentos...' : 'Seleccione su tipo de documento'}
-                                                            </option>
-                                                            {
-                                                                tiposDocumentos.length != 0 ?
-                                                                    tiposDocumentos.map(({ id, nombre, abreviatura }) => <option key={id} value={abreviatura}>{nombre}</option>)
-                                                                    :
-                                                                    ""
-                                                            }
-                                                        </select>
-                                                        {!formularioCompleto ? <div id="emailHelp" className="form-text">Este campo es obligatorio</div> : ""}
+                                                    <select className="form-select" value={tipoDocumento} disabled={disabledTipoDocumento} onChange={(e) => setTipoDocumento(e.target.value)}>
+                                                        <option value="">
+                                                            {disabledTipoDocumento ? 'Cargando Tipo de Documentos...' : 'Seleccione su tipo de documento'}
+                                                        </option>
+                                                        {
+                                                            tiposDocumentos.length != 0 ?
+                                                                tiposDocumentos.map(({ id, nombre, abreviatura }) => <option key={id} value={abreviatura}>{nombre}</option>)
+                                                                :
+                                                                ""
+                                                        }
+                                                    </select>
+                                                    {!formularioCompleto ? <div id="emailHelp" className="form-text">Este campo es obligatorio</div> : ""}
 
-                                                    </div>
-                                                    <div className="col-12 mt-2">
-                                                        <input type="text" className="form-control" placeholder="Documento" value={params['documento']} disabled />
-                                                    </div>
                                                 </div>
+                                                <div className="col-12 mt-2">
+                                                    <input type="text" className="form-control" placeholder="Documento" value={params['documento']} disabled />
+                                                </div>
+                                            </div>
                                     }
                                     {
                                         exitoEjecucionInscripcion ?
@@ -282,16 +245,13 @@ const Inscribirse = ({ ctx }) => {
                                                 :
                                                 <button className="btn btn-primary" type="button" disabled>
                                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    <span className="visually-hidden">Inscribiéndote...</span>
+                                                    <span className="visually-hidden">Cargando...</span>
                                                 </button>
                                             :
-                                            infoEvento.estado == 1 ?
+                                            infoEvento.estado == 1 || infoEvento.estado == 2 ?
                                                 <button className="btn btn-danger" onClick={() => cancelar()} disabled={accionFinalizada}>Cancelar</button>
                                                 :
-                                                infoEvento.estado == 2 ?
-                                                    null
-                                                    :
-                                                    <button className="btn btn-primary" onClick={() => inscribirse()} disabled={accionFinalizada}>Inscribirse</button>
+                                                <button className="btn btn-primary" onClick={() => inscribirse()} disabled={accionFinalizada}>Pre-Inscripción</button>
                                     }
                                 </div>
                             </div>

@@ -8,13 +8,13 @@ import { request } from "@ombiel/aek-lib";
 
 const Evento = ({ ctx }) => {
     // const
-    const baseUrlEventos = "https://registros.uniminuto.edu/api_eventos_test";
-    // const baseUrlEventos = "https://registros.uniminuto.edu/api_eventos";
+    // const baseUrlEventos = "https://registros.uniminuto.edu/api_eventos_test";
+    const baseUrlEventos = "https://registros.uniminuto.edu/api_eventos";
     // const baseUrlEventos = "http://localhost/api_eventos"
     const baseUrlDA = "https://registros.uniminuto.edu/api_da"
     // const beseUrlWallet = "http://localhost/api_wallet"
-    const beseUrlWallet = "https://comunidad.uniminuto.edu/api_wallet_test"
-    // const beseUrlWallet = "https://comunidad.uniminuto.edu/api_wallet"
+    // const beseUrlWallet = "https://comunidad.uniminuto.edu/api_wallet_test"
+    const beseUrlWallet = "https://comunidad.uniminuto.edu/api_wallet"
 
     // states filters
     const [rectorias, setRectorias] = useState([])
@@ -47,35 +47,9 @@ const Evento = ({ ctx }) => {
     // obtiene la informacion del usuario por el token
     useEffect(() => {
         // make a request cmAuth
-        // request.action("get-user").end((err, response) => {
-        //     setUserData(response.body)
-        // });
-        setTimeout(() => {
-            setUserData({
-                "jti": "oiy9WnlLsGzutOakf1-znw",
-                "iat": 1715791542,
-                "iss": "ExLibris",
-                "sub": "CampusMUser",
-                "exp": 1718383542,
-                "username": "michell.rojas@uniminuto.edu.co",
-                "mail": "michell.rojas@uniminuto.edu.co",
-                "firstName": "Michell Dayann",
-                "lastName": "Rojas Tobar",
-                "cmPersonId": 1001911673,
-                // "cmPersonId": 1024580021,
-                "cmOrgCode": 1000001542,
-                "cmProfileGroupId": 1000004751,
-                "cmIntegrationProfileId": 4541,
-                "extraAttrs": {
-                    "idUniminuto": "000746978"
-                    // "idUniminuto": "000209733"
-                },
-                "cmauthType": "SAML",
-                "enc": "FbNlq2dJ01UdV19moUNtpOKQpC5g7pk4SX2_nPFhdoT0wJ1RY_loV3JbHonPtgeAG3BOhoJBkkuesoTcYGgzdP9nok4d4IREJFPkNU_Qz4ZxxjJT9U7Cb0Wz6wZS2mzjrpYb3so46QjDngmvt-xPDmuCldE1GOnEeMyGOKDdb98ltzpyQjJtSrv576CKPbtJyqcmADs2qkoo7VCNiD5fpSGc30PZd0P-u0aJAlSAh133n8IZn4fsq4fLaIJs72e20CgEy8uAvf8jJ4PJ-VTPWLy67dG0KCrocqs2_V3D-XGYMVFxqr7quFpcywsbhyChry6NkiK0t4P9wXBm5QIzhQ.BX92ruuykPDpr60p25GVG1F-vKmkr44PkxO7hOmGCo1rwLpMvLZZRqSFLtdJRK3k2lbHwQ3N8my9WZMR0dQYo0tTzX8xwDvj-BHwbM4B9YYX2k2jZ_vTH37FtMosRVAWwRGK4sKTldB2PiQwv0hsUwAuwsDhmAQuXRm82kH_q70",
-                "authType": "CMAUTH",
-                "rolesHash": "sxO1mC5KqPWibxW0J9AUsmJ1fUriP01V6BZOJfDhSvQ="
-            })
-        }, 2000)
+        request.action("get-user").end((err, response) => {
+            setUserData(response.body)
+        });
     }, [])
 
     useEffect(() => {
@@ -155,7 +129,7 @@ const Evento = ({ ctx }) => {
                                 <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#eventos-disponibles" type="button" role="tab" aria-controls="home" aria-selected="true">Eventos Disponibles</button>
                             </li>
                             <li className="nav-item" role="presentation">
-                                <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#eventos-inscritos" type="button" role="tab" aria-controls="profile" aria-selected="false" onClick={() => { obtenerEventosInscrito() }}>Eventos Inscritos</button>
+                                <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#eventos-inscritos" type="button" role="tab" aria-controls="profile" aria-selected="false" onClick={() => { obtenerEventosInscrito() }}>Eventos Pre-Inscritos</button>
                             </li>
                         </ul>
                         <div className="tab-content" id="tap-opciones">
@@ -225,7 +199,7 @@ const Evento = ({ ctx }) => {
                                                 )
                                             })
                                             :
-                                            <Cargando mensaje={"No te has inscrito a ningun evento"} isLoading={false} />
+                                            <Cargando mensaje={"No te has pre-inscrito a ningun evento"} isLoading={false} />
                                 }
                             </div>
                         </div>
